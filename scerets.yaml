@@ -1,0 +1,4 @@
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  REPO_OWNER: "POOJATHORAVE"
+  REPO_NAME: "root-repo"
