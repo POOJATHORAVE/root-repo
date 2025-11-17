@@ -1,0 +1,10 @@
+title = "Gitleaks Config"
+[allowlist]
+description = "Allowlist for false positives"
+regexes = [
+    '''example-regex'''
+]
+
+[[rules]]
+description = "Generic Secret"
+regex = '''(?i)(secret|password|api[_-]?key)[=:]\s*['"][A-Za-z0-9]{8,}['"]'''
