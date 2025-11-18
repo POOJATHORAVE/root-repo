@@ -16,7 +16,7 @@ pipeline {
 
         stage('Gitleaks Scan') {
             steps {
-                // Make sure the script is executable inside Jenkins swami
+                // Make sure the script is executable inside Jenkins swami2
                 sh 'chmod +x scripts/run_gitleaks.sh'
 
                 // Run the Gitleaks scanning script
