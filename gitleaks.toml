@@ -14,7 +14,7 @@ regex = '''AKIA[0-9A-Z]{16}'''
 tags = ["aws","secret"]
 
 [[rules]]
-id = "aws-secret-key"
+id = "AKIAIOSFODNN7EXAMPLE"
 description = "AWS Secret Access Key"
 regex = '''(?i)aws_secret_access_key.*['"][0-9a-zA-Z/+]{40}['"]'''
 tags = ["aws","secret"]
