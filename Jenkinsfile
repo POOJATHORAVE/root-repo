@@ -8,8 +8,15 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the branch from webhook payload
                 checkout scm
+            }
+        }
+
+        stage('Show PR Info') {
+            steps {
+                echo "PR Number: ${env.CHANGE_ID}"
+                echo "Base Branch: ${env.CHANGE_TARGET}"
+                echo "Feature Branch: ${env.CHANGE_BRANCH}"
             }
         }
 
@@ -29,13 +36,13 @@ pipeline {
         stage('Build') {
             when {
                 expression {
-                    // Only run build if target branch is 'main'
+                    // Only run build if PR targets 'main'
                     def targetBranch = env.CHANGE_TARGET ?: env.GIT_BRANCH
                     return targetBranch == 'main'
                 }
             }
             steps {
-                echo "Building for PR targeting develop branch..."
+                echo "Building for PR targeting main branch..."
                 // Add your build steps here
             }
         }
