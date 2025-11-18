@@ -16,11 +16,11 @@ pipeline {
 
         stage('Gitleaks Scan') {
             steps {
-                // Ensure the script is executable
+                // Make sure the script is executable inside Jenkins
                 sh 'chmod +x scripts/run_gitleaks.sh'
-                
-                // Run your Gitleaks scanning script
-                sh 'bash scripts/run_gitleaks.sh'
+
+                // Run the Gitleaks scanning script
+                sh './scripts/run_gitleaks.sh'
             }
         }
     }
