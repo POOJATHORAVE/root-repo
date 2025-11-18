@@ -29,7 +29,7 @@ pipeline {
         stage('Build') {
             when {
                 expression {
-                    // Only run build if target branch is 'develop'
+                    // Only run build if target branch is 'main'
                     def targetBranch = env.CHANGE_TARGET ?: env.GIT_BRANCH
                     return targetBranch == 'main'
                 }
