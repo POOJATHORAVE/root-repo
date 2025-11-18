@@ -16,8 +16,11 @@ pipeline {
 
         stage('Gitleaks Scan') {
             steps {
+                // Ensure the script is executable
+                sh 'chmod +x scripts/run_gitleaks.sh'
+                
                 // Run your Gitleaks scanning script
-                sh 'scripts/run_gitleaks.sh'
+                sh 'bash scripts/run_gitleaks.sh'
             }
         }
     }
