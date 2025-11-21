@@ -8,7 +8,19 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                script {
+                    // Checkout with credentials for authentication
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: scm.branches,
+                        doGenerateSubmoduleConfigurations: false,
+                        extensions: [[$class: 'CloneOption', depth: 0, noTags: false, reference: '', shallow: false]],
+                        userRemoteConfigs: [[
+                            credentialsId: env.GIT_CREDENTIALS_ID ?: 'github-credentials',
+                            url: scm.userRemoteConfigs[0].url
+                        ]]
+                    ])
+                }
             }
         }
 
@@ -25,9 +37,21 @@ pipeline {
                 script {
                     echo "Running secret scan with Gitleaks..."
                     sh '''
-                        curl -sSL https://github.com/gitleaks/gitleaks/releases/download/${GITLEAKS_VERSION}/gitleaks-linux-amd64 -o gitleaks
+                        # Download Gitleaks
+                        # Remove 'v' prefix if present for download URL
+                        VERSION_NUM="${GITLEAKS_VERSION#v}"
+                        curl -sSL "https://github.com/gitleaks/gitleaks/releases/download/${GITLEAKS_VERSION}/gitleaks_${VERSION_NUM}_linux_x64.tar.gz" -o gitleaks.tar.gz
+                        tar -xzf gitleaks.tar.gz
                         chmod +x gitleaks
-                        ./gitleaks detect --source . --verbose --redact --exit-code 1
+                        
+                        # Run Gitleaks with config if available
+                        if [ -f gitleaks.toml ]; then
+                            echo "Using gitleaks.toml configuration"
+                            ./gitleaks detect --source . --config gitleaks.toml --verbose --redact --exit-code 1
+                        else
+                            echo "Using default configuration"
+                            ./gitleaks detect --source . --verbose --redact --exit-code 1
+                        fi
                     '''
                 }
             }
