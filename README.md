@@ -128,8 +128,10 @@ on:
 You can also run Gitleaks locally:
 
 ```bash
-# Download Gitleaks
-curl -sSL "https://github.com/gitleaks/gitleaks/releases/download/v8.18.2/gitleaks_8.18.2_linux_x64.tar.gz" -o gitleaks.tar.gz
+# Download Gitleaks (check for latest version at https://github.com/gitleaks/gitleaks/releases)
+GITLEAKS_VERSION="v8.18.2"
+VERSION_NUM="${GITLEAKS_VERSION#v}"
+curl -sSL "https://github.com/gitleaks/gitleaks/releases/download/${GITLEAKS_VERSION}/gitleaks_${VERSION_NUM}_linux_x64.tar.gz" -o gitleaks.tar.gz
 tar -xzf gitleaks.tar.gz
 
 # Run scan

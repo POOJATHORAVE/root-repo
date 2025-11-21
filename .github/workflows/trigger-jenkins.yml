@@ -14,7 +14,11 @@ jobs:
 
     steps:
       - name: Trigger Jenkins webhook
-        if: ${{ secrets.JENKINS_URL != '' && secrets.JENKINS_TOKEN != '' }}
+        if: |
+          ${{ secrets.JENKINS_URL != '' && 
+              secrets.JENKINS_USER != '' && 
+              secrets.JENKINS_TOKEN != '' && 
+              secrets.JENKINS_JOB_NAME != '' }}
         run: |
           echo "Triggering Jenkins pipeline..."
           curl -X POST \
@@ -24,7 +28,11 @@ jobs:
         continue-on-error: true
 
       - name: Jenkins not configured
-        if: ${{ secrets.JENKINS_URL == '' || secrets.JENKINS_TOKEN == '' }}
+        if: |
+          ${{ secrets.JENKINS_URL == '' || 
+              secrets.JENKINS_USER == '' || 
+              secrets.JENKINS_TOKEN == '' || 
+              secrets.JENKINS_JOB_NAME == '' }}
         run: |
           echo "⚠️  Jenkins webhook is not configured."
           echo "To enable Jenkins integration, add the following secrets to your repository:"

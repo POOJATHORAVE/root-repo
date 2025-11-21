@@ -38,7 +38,9 @@ pipeline {
                     echo "Running secret scan with Gitleaks..."
                     sh '''
                         # Download Gitleaks
-                        curl -sSL "https://github.com/gitleaks/gitleaks/releases/download/${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION#v}_linux_x64.tar.gz" -o gitleaks.tar.gz
+                        # Remove 'v' prefix if present for download URL
+                        VERSION_NUM="${GITLEAKS_VERSION#v}"
+                        curl -sSL "https://github.com/gitleaks/gitleaks/releases/download/${GITLEAKS_VERSION}/gitleaks_${VERSION_NUM}_linux_x64.tar.gz" -o gitleaks.tar.gz
                         tar -xzf gitleaks.tar.gz
                         chmod +x gitleaks
                         
