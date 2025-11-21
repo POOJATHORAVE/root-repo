@@ -1,0 +1,36 @@
+name: Trigger Jenkins Pipeline
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+      - master
+
+jobs:
+  trigger-jenkins:
+    name: Trigger Jenkins Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Jenkins webhook
+        if: ${{ secrets.JENKINS_URL != '' && secrets.JENKINS_TOKEN != '' }}
+        run: |
+          echo "Triggering Jenkins pipeline..."
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            -u "${{ secrets.JENKINS_USER }}:${{ secrets.JENKINS_TOKEN }}" \
+            "${{ secrets.JENKINS_URL }}/job/${{ secrets.JENKINS_JOB_NAME }}/buildWithParameters?BRANCH_NAME=${{ github.head_ref }}&PR_NUMBER=${{ github.event.pull_request.number }}"
+        continue-on-error: true
+
+      - name: Jenkins not configured
+        if: ${{ secrets.JENKINS_URL == '' || secrets.JENKINS_TOKEN == '' }}
+        run: |
+          echo "⚠️  Jenkins webhook is not configured."
+          echo "To enable Jenkins integration, add the following secrets to your repository:"
+          echo "  - JENKINS_URL: Your Jenkins server URL"
+          echo "  - JENKINS_USER: Jenkins username"
+          echo "  - JENKINS_TOKEN: Jenkins API token"
+          echo "  - JENKINS_JOB_NAME: Name of the Jenkins job to trigger"
+          echo ""
+          echo "Secret detection is handled by the 'Secret Detection with Gitleaks' workflow."
