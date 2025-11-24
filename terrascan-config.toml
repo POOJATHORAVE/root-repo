@@ -1,0 +1,38 @@
+[scan]
+  # Scan rules configuration for Terrascan
+  # Policies to skip (comma-separated list)
+  skip-rules = []
+  
+  # Severity level: low, medium, high
+  severity = "medium"
+  
+  # Categories to scan
+  categories = [
+    "Identity and Access Management",
+    "Data Protection",
+    "Infrastructure Security",
+    "Logging and Monitoring",
+    "Resilience",
+    "Compliance Validation"
+  ]
+
+[scan-rules]
+  # Specify the policy path (optional)
+  # policy-path = "./policies"
+  
+  # Specify the policy type (optional)
+  # policy-type = ["aws", "azure", "gcp", "kubernetes"]
+
+[notifications]
+  # Notification webhook URL (optional)
+  # webhook-url = ""
+  
+  # Notification token (optional)
+  # webhook-token = ""
+
+[output]
+  # Output format: json, yaml, xml, junit-xml, sarif
+  format = "json"
+  
+  # Output file path (optional)
+  # output-file = "terrascan-report.json"
