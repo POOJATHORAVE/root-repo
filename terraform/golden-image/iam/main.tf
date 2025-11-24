@@ -21,10 +21,55 @@ resource "aws_iam_role" "image_builder" {
   })
 }
 
-# Attach AWS Managed Policies
-resource "aws_iam_role_policy_attachment" "s3_full_access" {
+# Custom S3 Policy for Image Builder
+resource "aws_iam_policy" "s3_access" {
+  name        = "ImageBuilderS3AccessPolicy"
+  description = "Policy for Image Builder to access specific S3 buckets"
+  
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:ListBucket"
+        ]
+        Resource = [
+          "arn:aws:s3:::ims-prod-s3-euw1-gibinaries",
+          "arn:aws:s3:::ims-prod-s3-euw1-gibinaries/*"
+        ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:PutObject",
+          "s3:GetObject",
+          "s3:ListBucket"
+        ]
+        Resource = [
+          "arn:aws:s3:::ims-prod-s3-euw1-imagescan",
+          "arn:aws:s3:::ims-prod-s3-euw1-imagescan/*"
+        ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:PutObject"
+        ]
+        Resource = [
+          "arn:aws:s3:::*/image-builder-logs/*"
+        ]
+      }
+    ]
+  })
+  
+  tags = var.common_tags
+}
+
+resource "aws_iam_role_policy_attachment" "s3_access" {
   role       = aws_iam_role.image_builder.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+  policy_arn = aws_iam_policy.s3_access.arn
 }
 
 resource "aws_iam_role_policy_attachment" "ssm_managed_instance" {

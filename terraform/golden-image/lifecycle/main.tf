@@ -19,7 +19,7 @@ resource "aws_imagebuilder_lifecycle_policy" "ami_lifecycle" {
     }
     filter {
       type  = "AGE"
-      value = 14
+      value = var.deprecate_after_days
       unit  = "DAYS"
     }
   }
@@ -33,7 +33,7 @@ resource "aws_imagebuilder_lifecycle_policy" "ami_lifecycle" {
     }
     filter {
       type  = "AGE"
-      value = 28
+      value = var.disable_after_days
       unit  = "DAYS"
     }
   }
@@ -48,7 +48,7 @@ resource "aws_imagebuilder_lifecycle_policy" "ami_lifecycle" {
     }
     filter {
       type  = "AGE"
-      value = 42
+      value = var.delete_after_days
       unit  = "DAYS"
     }
     # Exclusion rules

@@ -62,8 +62,11 @@ module "image_builder" {
 module "lifecycle" {
   source = "./lifecycle"
   
-  iam_role_arn = module.iam.lifecycle_role_arn
-  common_tags  = var.common_tags
+  iam_role_arn         = module.iam.lifecycle_role_arn
+  deprecate_after_days = var.deprecate_after_days
+  disable_after_days   = var.disable_after_days
+  delete_after_days    = var.delete_after_days
+  common_tags          = var.common_tags
   
   depends_on = [module.image_builder]
 }

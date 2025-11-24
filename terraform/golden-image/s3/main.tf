@@ -85,10 +85,8 @@ resource "aws_s3_bucket_policy" "binaries" {
       {
         Sid    = "AllowImageBuilderRoleAccess"
         Effect = "Allow"
-        Principal = var.image_builder_role_arn != "" ? {
+        Principal = {
           AWS = var.image_builder_role_arn
-        } : {
-          Service = "imagebuilder.amazonaws.com"
         }
         Action = [
           "s3:GetObject",
@@ -98,11 +96,6 @@ resource "aws_s3_bucket_policy" "binaries" {
           aws_s3_bucket.binaries.arn,
           "${aws_s3_bucket.binaries.arn}/*"
         ]
-        Condition = var.image_builder_role_arn != "" ? null : {
-          StringEquals = {
-            "aws:SourceAccount" = data.aws_caller_identity.current.account_id
-          }
-        }
       }
     ]
   })

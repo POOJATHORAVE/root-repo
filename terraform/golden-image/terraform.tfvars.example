@@ -24,3 +24,19 @@ common_tags = {
   Application = "EC2-Image-Builder"
   Compliance  = "CIS-Level-1"
 }
+
+# Optional: Override default base image and CIS component ARNs
+# Note: Replace x.x.x with actual version numbers
+# You can find available versions using:
+# aws imagebuilder list-images --owner aws
+# aws imagebuilder list-components --owner aws
+
+# rhel_8_base_image_arn     = "arn:aws:imagebuilder:eu-west-1:aws:image/red-hat-enterprise-linux-8-x86/2024.1.0"
+# rhel_9_base_image_arn     = "arn:aws:imagebuilder:eu-west-1:aws:image/red-hat-enterprise-linux-9-x86/2024.1.0"
+# cis_rhel_8_component_arn  = "arn:aws:imagebuilder:eu-west-1:aws:component/cis-rhel-8-level-1/1.0.0"
+# cis_rhel_9_component_arn  = "arn:aws:imagebuilder:eu-west-1:aws:component/cis-rhel-9-level-1/1.0.0"
+
+# Optional: Override lifecycle policy durations (in days)
+# deprecate_after_days = 14  # Default: 2 weeks
+# disable_after_days   = 28  # Default: 4 weeks
+# delete_after_days    = 42  # Default: 6 weeks

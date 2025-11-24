@@ -152,11 +152,11 @@ resource "aws_imagebuilder_component" "linux_baseline" {
 resource "aws_imagebuilder_image_recipe" "rhel_8_10" {
   name         = "Tesco-IMS-GoldenImage-RHEL-8.10-Recipe"
   version      = "1.0.0"
-  parent_image = "arn:aws:imagebuilder:eu-west-1:aws:image/red-hat-enterprise-linux-8-x86/x.x.x"
+  parent_image = var.rhel_8_base_image_arn
   description  = "Tesco IMS Golden Image for RHEL 8.10 with CIS Level 1 Benchmark"
   
   component {
-    component_arn = "arn:aws:imagebuilder:eu-west-1:aws:component/cis-rhel-8-level-1/x.x.x"
+    component_arn = var.cis_rhel_8_component_arn
   }
   
   component {
@@ -183,11 +183,11 @@ resource "aws_imagebuilder_image_recipe" "rhel_8_10" {
 resource "aws_imagebuilder_image_recipe" "rhel_9_6" {
   name         = "Tesco-IMS-GoldenImage-RHEL-9.6-Recipe"
   version      = "1.0.0"
-  parent_image = "arn:aws:imagebuilder:eu-west-1:aws:image/red-hat-enterprise-linux-9-x86/x.x.x"
+  parent_image = var.rhel_9_base_image_arn
   description  = "Tesco IMS Golden Image for RHEL 9.6 with CIS Level 1 Benchmark"
   
   component {
-    component_arn = "arn:aws:imagebuilder:eu-west-1:aws:component/cis-rhel-9-level-1/x.x.x"
+    component_arn = var.cis_rhel_9_component_arn
   }
   
   component {
