@@ -214,7 +214,7 @@ resource "aws_imagebuilder_image_recipe" "rhel_9_6" {
 # Infrastructure Configuration
 resource "aws_imagebuilder_infrastructure_configuration" "main" {
   name                          = "Tesco-IMS-GoldenImage-Infrastructure-Config"
-  instance_profile_name         = split("/", var.instance_profile_arn)[1]
+  instance_profile_name         = var.instance_profile_name
   subnet_id                     = var.subnet_id
   security_group_ids            = [var.security_group_id]
   instance_types                = ["t3.medium"]

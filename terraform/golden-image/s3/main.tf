@@ -1,6 +1,7 @@
 # S3 Buckets for Image Builder
 # 1. ims-prod-s3-euw1-gibinaries - for software binaries (Qualys agent, etc.)
 # 2. ims-prod-s3-euw1-imagescan - for CIS benchmark image scanning
+# Note: Bucket names are defined in the design document and are intentionally hardcoded
 
 resource "aws_s3_bucket" "binaries" {
   bucket = "ims-prod-s3-euw1-gibinaries"

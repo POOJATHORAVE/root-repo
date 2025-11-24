@@ -3,6 +3,11 @@ variable "instance_profile_arn" {
   type        = string
 }
 
+variable "instance_profile_name" {
+  description = "Name of the IAM instance profile for Image Builder"
+  type        = string
+}
+
 variable "subnet_id" {
   description = "Subnet ID for Image Builder infrastructure"
   type        = string

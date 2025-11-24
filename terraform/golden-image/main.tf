@@ -48,12 +48,13 @@ module "security_groups" {
 module "image_builder" {
   source = "./image-builder"
   
-  instance_profile_arn = module.iam.instance_profile_arn
-  subnet_id            = var.private_subnet_id
-  security_group_id    = module.security_groups.golden_image_sg_id
-  s3_binaries_bucket   = module.s3.binaries_bucket_name
-  target_account_ids   = var.target_account_ids
-  common_tags          = var.common_tags
+  instance_profile_arn  = module.iam.instance_profile_arn
+  instance_profile_name = module.iam.instance_profile_name
+  subnet_id             = var.private_subnet_id
+  security_group_id     = module.security_groups.golden_image_sg_id
+  s3_binaries_bucket    = module.s3.binaries_bucket_name
+  target_account_ids    = var.target_account_ids
+  common_tags           = var.common_tags
   
   depends_on = [module.iam, module.s3, module.security_groups]
 }
