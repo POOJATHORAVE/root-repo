@@ -137,3 +137,33 @@ resource "aws_iam_role_policy_attachment" "cloudwatch_logs" {
   role       = aws_iam_role.image_builder.name
   policy_arn = aws_iam_policy.cloudwatch_logs.arn
 }
+
+# Policy for accessing Secrets Manager
+resource "aws_iam_policy" "secrets_manager" {
+  name        = "ImageBuilderSecretsManagerPolicy"
+  description = "Policy for Image Builder to access secrets in Secrets Manager"
+  
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:DescribeSecret"
+        ]
+        Resource = [
+          "arn:aws:secretsmanager:*:*:secret:qualys-credentials-*",
+          "arn:aws:secretsmanager:*:*:secret:datadog-api-key-*"
+        ]
+      }
+    ]
+  })
+  
+  tags = var.common_tags
+}
+
+resource "aws_iam_role_policy_attachment" "secrets_manager" {
+  role       = aws_iam_role.image_builder.name
+  policy_arn = aws_iam_policy.secrets_manager.arn
+}

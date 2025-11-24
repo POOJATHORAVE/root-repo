@@ -30,7 +30,10 @@ module "iam" {
 module "s3" {
   source = "./s3"
   
-  common_tags = var.common_tags
+  image_builder_role_arn = module.iam.instance_role_arn
+  common_tags            = var.common_tags
+  
+  depends_on = [module.iam]
 }
 
 # Security Groups

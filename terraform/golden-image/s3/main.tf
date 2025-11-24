@@ -83,10 +83,12 @@ resource "aws_s3_bucket_policy" "binaries" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid    = "AllowImageBuilderAccess"
+        Sid    = "AllowImageBuilderRoleAccess"
         Effect = "Allow"
-        Principal = {
-          Service = "ec2.amazonaws.com"
+        Principal = var.image_builder_role_arn != "" ? {
+          AWS = var.image_builder_role_arn
+        } : {
+          Service = "imagebuilder.amazonaws.com"
         }
         Action = [
           "s3:GetObject",
@@ -96,7 +98,14 @@ resource "aws_s3_bucket_policy" "binaries" {
           aws_s3_bucket.binaries.arn,
           "${aws_s3_bucket.binaries.arn}/*"
         ]
+        Condition = var.image_builder_role_arn != "" ? null : {
+          StringEquals = {
+            "aws:SourceAccount" = data.aws_caller_identity.current.account_id
+          }
+        }
       }
     ]
   })
 }
+
+data "aws_caller_identity" "current" {}

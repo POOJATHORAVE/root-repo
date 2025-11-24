@@ -57,6 +57,27 @@ terraform/
 - AWS CLI configured
 - VPC with private subnets
 - Access to CIS hardened base images
+- AWS Secrets Manager secrets for:
+  - Qualys credentials (`qualys-credentials`)
+  - Datadog API key (`datadog-api-key`)
+
+## Secrets Setup
+
+Before deploying, create the required secrets in AWS Secrets Manager:
+
+```bash
+# Create Qualys credentials secret
+aws secretsmanager create-secret \
+  --name qualys-credentials \
+  --description "Qualys agent activation credentials" \
+  --secret-string '{"activation_id":"YOUR_ACTIVATION_ID","customer_id":"YOUR_CUSTOMER_ID"}'
+
+# Create Datadog API key secret
+aws secretsmanager create-secret \
+  --name datadog-api-key \
+  --description "Datadog agent API key" \
+  --secret-string '{"api_key":"YOUR_API_KEY"}'
+```
 
 ## Configuration
 

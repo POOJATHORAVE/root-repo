@@ -14,6 +14,16 @@ resource "aws_imagebuilder_component" "linux_baseline" {
         name = "build"
         steps = [
           {
+            name   = "InstallDependencies"
+            action = "ExecuteBash"
+            inputs = {
+              commands = [
+                "echo 'Installing required dependencies...'",
+                "sudo yum install -y jq unzip"
+              ]
+            }
+          },
+          {
             name   = "InstallSSMAgent"
             action = "ExecuteBash"
             inputs = {
@@ -33,7 +43,11 @@ resource "aws_imagebuilder_component" "linux_baseline" {
                 "echo 'Downloading Qualys Agent from S3...'",
                 "aws s3 cp s3://${var.s3_binaries_bucket}/qualys/qualys-cloud-agent.x86_64.rpm /tmp/",
                 "sudo rpm -ivh /tmp/qualys-cloud-agent.x86_64.rpm",
-                "sudo /usr/local/qualys/cloud-agent/bin/qualys-cloud-agent.sh ActivationId=<ACTIVATION_ID> CustomerId=<CUSTOMER_ID>",
+                "echo 'Retrieving Qualys credentials from Secrets Manager...'",
+                "QUALYS_SECRETS=$(aws secretsmanager get-secret-value --secret-id qualys-credentials --query SecretString --output text)",
+                "ACTIVATION_ID=$(echo $QUALYS_SECRETS | jq -r '.activation_id')",
+                "CUSTOMER_ID=$(echo $QUALYS_SECRETS | jq -r '.customer_id')",
+                "sudo /usr/local/qualys/cloud-agent/bin/qualys-cloud-agent.sh ActivationId=$ACTIVATION_ID CustomerId=$CUSTOMER_ID",
                 "rm -f /tmp/qualys-cloud-agent.x86_64.rpm"
               ]
             }
@@ -44,7 +58,9 @@ resource "aws_imagebuilder_component" "linux_baseline" {
             inputs = {
               commands = [
                 "echo 'Installing Datadog Agent...'",
-                "DD_AGENT_MAJOR_VERSION=7 DD_API_KEY=<API_KEY> DD_SITE='datadoghq.com' bash -c \"$(curl -L https://s3.amazonaws.com/dd-agent/scripts/install_script.sh)\""
+                "echo 'Retrieving Datadog API key from Secrets Manager...'",
+                "DD_API_KEY=$(aws secretsmanager get-secret-value --secret-id datadog-api-key --query SecretString --output text | jq -r '.api_key')",
+                "DD_AGENT_MAJOR_VERSION=7 DD_SITE='datadoghq.com' bash -c \"$(curl -L https://s3.amazonaws.com/dd-agent/scripts/install_script.sh)\""
               ]
             }
           },
