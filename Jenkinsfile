@@ -45,11 +45,18 @@ pipeline {
                             curl -L "https://github.com/tenable/terrascan/releases/download/${TERRASCAN_VERSION}/terrascan_${TERRASCAN_VERSION#v}_Linux_x86_64.tar.gz" -o terrascan.tar.gz
                             tar -xf terrascan.tar.gz terrascan
                             chmod +x terrascan
-                            sudo mv terrascan /usr/local/bin/ || mv terrascan /usr/bin/ || export PATH=$PATH:$(pwd)
+                            # Try to install in system paths, fallback to current directory
+                            sudo mv terrascan /usr/local/bin/ 2>/dev/null || \
+                            mv terrascan /usr/bin/ 2>/dev/null || \
+                            echo "Terrascan installed in current directory"
                         fi
                         
                         # Run Terrascan using the helper script
                         chmod +x scripts/run_terrascan.sh
+                        # Use ./terrascan directly if not in PATH
+                        if ! command -v terrascan &> /dev/null && [ -f ./terrascan ]; then
+                            export PATH=$PATH:$(pwd)
+                        fi
                         ./scripts/run_terrascan.sh . terrascan-config.toml human
                     '''
                 }

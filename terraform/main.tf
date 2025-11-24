@@ -8,6 +8,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.5"
+    }
   }
 }
 
@@ -23,9 +27,14 @@ variable "aws_region" {
 }
 
 variable "bucket_name" {
-  description = "S3 bucket name"
+  description = "S3 bucket name (must be globally unique)"
   type        = string
-  default     = "my-test-bucket"
+  default     = "my-test-bucket-${random_id.bucket_suffix.hex}"
+}
+
+# Generate random suffix for bucket name to ensure uniqueness
+resource "random_id" "bucket_suffix" {
+  byte_length = 4
 }
 
 # S3 Bucket Example

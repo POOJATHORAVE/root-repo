@@ -26,6 +26,17 @@ echo "Configuration file: $CONFIG_FILE"
 echo "Output format: $OUTPUT_FORMAT"
 echo ""
 
+# Validate configuration file if provided
+if [ "$CONFIG_FILE" != "terrascan-config.toml" ] && [ -n "$CONFIG_FILE" ]; then
+    if [ ! -f "$CONFIG_FILE" ]; then
+        echo "Warning: Configuration file '$CONFIG_FILE' not found. Using default settings."
+        CONFIG_FILE=""
+    elif [ ! -r "$CONFIG_FILE" ]; then
+        echo "Error: Configuration file '$CONFIG_FILE' is not readable."
+        exit 1
+    fi
+fi
+
 # Run terrascan scan
 # --iac-type: Specify IaC type (terraform, k8s, helm, docker, etc.)
 # --scan-rules: Use custom policy path if needed
