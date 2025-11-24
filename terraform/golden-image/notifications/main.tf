@@ -153,7 +153,7 @@ resource "aws_cloudwatch_event_rule" "pre_deletion_warning" {
   name        = "image-builder-pre-deletion-warning"
   description = "Weekly check for images approaching deletion"
   
-  schedule_expression = "cron(0 9 ? * MON *)"  # Every Monday at 9 AM
+  schedule_expression = "cron(0 9 * * MON *)"  # Every Monday at 9 AM UTC
   
   tags = var.common_tags
 }

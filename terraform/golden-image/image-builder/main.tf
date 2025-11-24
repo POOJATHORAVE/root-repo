@@ -266,7 +266,7 @@ resource "aws_imagebuilder_image_pipeline" "rhel_8_10" {
   status                           = "ENABLED"
   
   schedule {
-    schedule_expression = "cron(0 0 ? * MON *)"  # Weekly on Monday
+    schedule_expression = "cron(0 0 * * MON *)"  # Weekly on Monday at midnight UTC
   }
   
   image_tests_configuration {
@@ -290,7 +290,7 @@ resource "aws_imagebuilder_image_pipeline" "rhel_9_6" {
   status                           = "ENABLED"
   
   schedule {
-    schedule_expression = "cron(0 0 ? * MON *)"  # Weekly on Monday
+    schedule_expression = "cron(0 0 * * MON *)"  # Weekly on Monday at midnight UTC
   }
   
   image_tests_configuration {
